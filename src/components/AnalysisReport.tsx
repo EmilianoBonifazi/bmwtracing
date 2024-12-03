@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Wand2 } from "lucide-react";
 
 interface AnalysisReportProps {
   workItemId: string;
@@ -15,15 +14,13 @@ interface AnalysisReportProps {
     description?: string;
   };
   onSave: (data: any) => void;
-  onGenerateAIAnalysis: () => void;
   isGenerating: boolean;
 }
 
 export const AnalysisReport = ({ 
   workItemId, 
   initialData, 
-  onSave, 
-  onGenerateAIAnalysis,
+  onSave,
   isGenerating 
 }: AnalysisReportProps) => {
   const [reportData, setReportData] = useState({
@@ -36,15 +33,7 @@ export const AnalysisReport = ({
   return (
     <Card className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Step 4: Analysis Report - Work Item #{workItemId}</h3>
-        <Button 
-          onClick={onGenerateAIAnalysis}
-          disabled={isGenerating}
-          className="flex items-center gap-2"
-        >
-          <Wand2 className="h-4 w-4" />
-          {isGenerating ? "Generating Analysis..." : "Generate AI Analysis"}
-        </Button>
+        <h3 className="text-lg font-semibold">Analysis Report - Work Item #{workItemId}</h3>
       </div>
       
       <div className="space-y-4">

@@ -8,7 +8,7 @@ const mockLogs = [
   { 
     index: 67,
     time: "59:58.7",
-    timestamp: "1144.8241",
+    timestamp: "2024-03-15T11:44:58.724",
     count: 98,
     ecuid: "INAD",
     apid: "ANTN",
@@ -23,7 +23,7 @@ const mockLogs = [
   {
     index: 69,
     time: "59:58.7",
-    timestamp: "1144.8244",
+    timestamp: "2024-03-15T11:44:58.744",
     count: 100,
     ecuid: "INAD",
     apid: "ANTN",
@@ -34,6 +34,21 @@ const mockLogs = [
     mode: "verbose",
     args: 8,
     payload: "[ SystemHal : 1053 : 27937 ] sl_hal_get_dtc_antenna_status: antenna_mode 5 antenna_adc 0 ret 0"
+  },
+  {
+    index: 70,
+    time: "59:58.8",
+    timestamp: "2024-03-15T11:44:58.824",
+    count: 101,
+    ecuid: "INAD",
+    apid: "DIAG",
+    ctid: "DIAG",
+    sessionId: "1053",
+    type: "log",
+    subtype: "warning" as const,
+    mode: "verbose",
+    args: 8,
+    payload: "[ DiagnosticManager : 1053 : 27937 ] Diagnostic check failed: Network connectivity issues detected"
   }
 ];
 
@@ -43,11 +58,13 @@ const Index = () => {
   const [errorDescription, setErrorDescription] = useState("");
   const [isGeneratingAnalysis, setIsGeneratingAnalysis] = useState(false);
   const [selectedWorkItem] = useState("2063495");
+  const [analysisGenerated, setAnalysisGenerated] = useState(false);
 
   const handleGenerateAnalysis = async () => {
     setIsGeneratingAnalysis(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
     setIsGeneratingAnalysis(false);
+    setAnalysisGenerated(true);
     toast({
       title: "Analysis Generated",
       description: "The AI analysis has been completed successfully.",
@@ -63,7 +80,6 @@ const Index = () => {
   };
 
   const handleZipUpload = (file: File) => {
-    // Handle ZIP file processing here
     console.log("Processing ZIP file:", file);
   };
 
@@ -80,8 +96,8 @@ const Index = () => {
         
         <AnalysisSection
           workItemId={selectedWorkItem}
-          logs={mockLogs}
-          errorTimestamp="2024-11-08T16:06:21"
+          logs={analysisGenerated ? mockLogs : []}
+          errorTimestamp="2024-03-15T11:44:58.744"
           isGeneratingAnalysis={isGeneratingAnalysis}
           onGenerateAnalysis={handleGenerateAnalysis}
           onSaveAnalysis={handleSaveAnalysis}
