@@ -1,22 +1,8 @@
 import React, { useState } from "react";
 import { Layout } from "@/components/Layout";
-import { FileUpload } from "@/components/FileUpload";
-import { WorkItemCard } from "@/components/WorkItemCard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LogViewer } from "@/components/LogViewer";
-import { TestDescription } from "@/components/TestDescription";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ErrorCorrelation } from "@/components/ErrorCorrelation";
-import { AnalysisReport } from "@/components/AnalysisReport";
+import { InputSources } from "@/components/InputSources";
+import { AnalysisSection } from "@/components/AnalysisSection";
 import { useToast } from "@/hooks/use-toast";
-
-const mockWorkItems = [
-  { id: "2063495", status: "completed" as const },
-  { id: "2063496", status: "processing" as const },
-  { id: "2063497", status: "error" as const },
-];
 
 const mockLogs = [
   { 
@@ -51,26 +37,22 @@ const mockLogs = [
   }
 ];
 
-const mockTestDescription = `Test Case ID: TC_NETWORK_001
-Description: Verify network communication between MARS and IDCevo modules
-Prerequisites: 
-- All systems operational
-- Network connections established
-
-Steps:
-1. Initialize MARS module
-2. Start IDCevo communication
-3. Verify packet transmission
-4. Check response times`;
-
 const Index = () => {
   const { toast } = useToast();
-  const [selectedWorkItem, setSelectedWorkItem] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentStep, setCurrentStep] = useState(1);
+  const [testDescription, setTestDescription] = useState("");
+  const [errorDescription, setErrorDescription] = useState("");
   const [isGeneratingAnalysis, setIsGeneratingAnalysis] = useState(false);
-  const [activeTab, setActiveTab] = useState("files");
+  const [selectedWorkItem] = useState("2063495");
+
+  const handleGenerateAnalysis = async () => {
+    setIsGeneratingAnalysis(true);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsGeneratingAnalysis(false);
+    toast({
+      title: "Analysis Generated",
+      description: "The AI analysis has been completed successfully.",
+    });
+  };
 
   const handleSaveAnalysis = (data: any) => {
     console.log("Saving analysis:", data);
@@ -80,132 +62,30 @@ const Index = () => {
     });
   };
 
-  const handleGenerateAIAnalysis = async () => {
-    setIsGeneratingAnalysis(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsGeneratingAnalysis(false);
-    setActiveTab("analysis");
-    toast({
-      title: "AI Analysis Complete",
-      description: "The analysis has been generated based on the test description and logs.",
-    });
+  const handleZipUpload = (file: File) => {
+    // Handle ZIP file processing here
+    console.log("Processing ZIP file:", file);
   };
-
-  const filteredWorkItems = mockWorkItems.filter(item => {
-    const matchesStatus = statusFilter === "all" || item.status === statusFilter;
-    const matchesSearch = item.id.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
 
   return (
     <Layout>
       <div className="space-y-8">
-        {!selectedWorkItem ? (
-          <div className="space-y-4">
-            <div className="flex gap-4 items-center">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="processing">Processing</SelectItem>
-                  <SelectItem value="error">Error</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                placeholder="Search work items..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-xs"
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredWorkItems.map((item) => (
-                <WorkItemCard
-                  key={item.id}
-                  {...item}
-                  onView={() => {
-                    setSelectedWorkItem(item.id);
-                    setCurrentStep(1);
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <button
-              onClick={() => setSelectedWorkItem(null)}
-              className="text-primary hover:underline flex items-center"
-            >
-              ← Back to Work Items
-            </button>
-            
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold">Step 1: Input Sources</h2>
-                <Tabs defaultValue="files" className="w-full">
-                  <TabsList>
-                    <TabsTrigger value="files">DLT Files</TabsTrigger>
-                    <TabsTrigger value="test">Test Description</TabsTrigger>
-                    <TabsTrigger value="error">Error Description</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="files">
-                    <FileUpload />
-                  </TabsContent>
-                  <TabsContent value="test">
-                    <TestDescription content={mockTestDescription} isActive={true} />
-                  </TabsContent>
-                  <TabsContent value="error">
-                    <Card className="p-6">
-                      <h3 className="text-lg font-semibold mb-4">Error Description</h3>
-                      <textarea
-                        className="w-full h-64 p-4 border rounded-md"
-                        placeholder="Paste error description here..."
-                      />
-                    </Card>
-                  </TabsContent>
-                </Tabs>
-              </div>
-
-              <div className="space-y-6">
-                <h2 className="text-2xl font-semibold">Step 2: Analysis</h2>
-                <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList>
-                    <TabsTrigger value="analysis">Analysis Report</TabsTrigger>
-                    <TabsTrigger value="logs">Relevant Logs</TabsTrigger>
-                    <TabsTrigger value="correlation">Error Correlation</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="analysis">
-                    <AnalysisReport
-                      workItemId={selectedWorkItem}
-                      onSave={handleSaveAnalysis}
-                      onGenerateAIAnalysis={handleGenerateAIAnalysis}
-                      isGenerating={isGeneratingAnalysis}
-                    />
-                  </TabsContent>
-                  
-                  <TabsContent value="logs">
-                    <LogViewer 
-                      logs={mockLogs}
-                      errorTimestamp="2024-11-08T16:06:21"
-                      timeWindow={30}
-                      isActive={true}
-                    />
-                  </TabsContent>
-                  
-                  <TabsContent value="correlation">
-                    <ErrorCorrelation workItemId={selectedWorkItem} />
-                  </TabsContent>
-                </Tabs>
-              </div>
-            </div>
-          </div>
-        )}
+        <InputSources
+          testDescription={testDescription}
+          errorDescription={errorDescription}
+          onTestDescriptionChange={setTestDescription}
+          onErrorDescriptionChange={setErrorDescription}
+          onZipUpload={handleZipUpload}
+        />
+        
+        <AnalysisSection
+          workItemId={selectedWorkItem}
+          logs={mockLogs}
+          errorTimestamp="2024-11-08T16:06:21"
+          isGeneratingAnalysis={isGeneratingAnalysis}
+          onGenerateAnalysis={handleGenerateAnalysis}
+          onSaveAnalysis={handleSaveAnalysis}
+        />
       </div>
     </Layout>
   );
