@@ -41,28 +41,30 @@ export const FileUpload = ({ dltFiles, onDltFilesChange }: FileUploadProps) => {
   return (
     <Card className="p-6">
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">DLT Files</h3>
-          <Button
-            onClick={() => fileInputRef.current?.click()}
-            className="bg-primary hover:bg-primary/90 flex items-center gap-2"
-          >
-            <Upload className="h-4 w-4" />
-            Upload DLT Files
-          </Button>
+          <div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept=".dlt"
+              multiple
+              className="hidden"
+            />
+            <Button
+              onClick={() => fileInputRef.current?.click()}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Upload className="h-4 w-4" />
+              Import DLT Files
+            </Button>
+          </div>
         </div>
         
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          accept=".dlt"
-          multiple
-          className="hidden"
-        />
-        
         {dltFiles.length > 0 && (
-          <div className="flex flex-wrap gap-2 p-4 border rounded-lg bg-white">
+          <div className="flex flex-wrap gap-2 p-4 border rounded-lg bg-gray-50">
             {dltFiles.map((file, index) => (
               <Badge
                 key={index}

@@ -48,7 +48,6 @@ export const AnalysisSection = ({
           <AnalysisReport
             workItemId={workItemId}
             onSave={onSaveAnalysis}
-            onGenerateAIAnalysis={onGenerateAnalysis}
             isGenerating={isGeneratingAnalysis}
           />
         </TabsContent>
