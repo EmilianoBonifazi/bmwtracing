@@ -9,8 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ErrorCorrelation } from "@/components/ErrorCorrelation";
+import { AnalysisReport } from "@/components/AnalysisReport";
 
-// Mock data for demonstration
 const mockWorkItems = [
   { id: "2063495", status: "completed" as const },
   { id: "2063496", status: "processing" as const },
@@ -63,10 +63,15 @@ Steps:
 4. Check response times`;
 
 const Index = () => {
-  const [selectedWorkItem, setSelectedWorkItem] = React.useState<string | null>(null);
+  const [selectedWorkItem, setSelectedWorkItem] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [logSearchTerm, setLogSearchTerm] = useState("");
+
+  const handleSaveAnalysis = (data: any) => {
+    console.log("Saving analysis:", data);
+    // Implement save functionality
+  };
 
   const filteredWorkItems = mockWorkItems.filter(item => {
     const matchesStatus = statusFilter === "all" || item.status === statusFilter;
@@ -124,15 +129,22 @@ const Index = () => {
               ← Back to Work Items
             </button>
             
-            <Tabs defaultValue="test-description">
+            <Tabs defaultValue="analysis-report">
               <TabsList>
+                <TabsTrigger value="analysis-report">Analysis Report</TabsTrigger>
                 <TabsTrigger value="test-description">Test Description</TabsTrigger>
                 <TabsTrigger value="error-description">Error Description</TabsTrigger>
                 <TabsTrigger value="logs">Logs</TabsTrigger>
                 <TabsTrigger value="correlation">Error Correlation</TabsTrigger>
-                <TabsTrigger value="report">Analysis Report</TabsTrigger>
               </TabsList>
               
+              <TabsContent value="analysis-report">
+                <AnalysisReport
+                  workItemId={selectedWorkItem}
+                  onSave={handleSaveAnalysis}
+                />
+              </TabsContent>
+
               <TabsContent value="test-description">
                 <TestDescription content={mockTestDescription} />
               </TabsContent>
@@ -140,9 +152,8 @@ const Index = () => {
               <TabsContent value="error-description">
                 <Card className="p-6">
                   <h3 className="text-lg font-semibold mb-4">Error Description</h3>
-                  <p className="text-gray-600">
-                    Communication error detected between MARS and IDCevo modules.
-                    VLAN mismatch causing packet transmission failures.
+                  <p className="text-gray-600 whitespace-pre-wrap">
+                    {/* Add error description content */}
                   </p>
                 </Card>
               </TabsContent>
@@ -155,21 +166,16 @@ const Index = () => {
                     onChange={(e) => setLogSearchTerm(e.target.value)}
                     className="max-w-xs"
                   />
-                  <LogViewer logs={filteredLogs} />
+                  <LogViewer 
+                    logs={filteredLogs}
+                    errorTimestamp="2024-11-08T16:06:21"
+                    timeWindow={30}
+                  />
                 </div>
               </TabsContent>
 
               <TabsContent value="correlation">
                 <ErrorCorrelation workItemId={selectedWorkItem} />
-              </TabsContent>
-              
-              <TabsContent value="report">
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Analysis Report</h3>
-                  <p className="text-gray-600">
-                    Report content will be generated using LLM analysis...
-                  </p>
-                </Card>
               </TabsContent>
             </Tabs>
           </div>

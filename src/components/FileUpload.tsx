@@ -24,7 +24,7 @@ export const FileUpload = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg bg-white">
+    <div className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg bg-white">
       <input
         type="file"
         ref={fileInputRef}
@@ -32,16 +32,13 @@ export const FileUpload = () => {
         accept=".zip"
         className="hidden"
       />
-      <Upload className="h-12 w-12 text-gray-400 mb-4" />
       <Button
         onClick={() => fileInputRef.current?.click()}
-        className="bg-primary hover:bg-primary/90"
+        className="bg-primary hover:bg-primary/90 flex items-center gap-2"
       >
-        Upload ZIP File
+        <Upload className="h-4 w-4" />
+        Upload ZIP
       </Button>
-      <p className="mt-2 text-sm text-gray-500">
-        Upload a ZIP file containing diagnostic data
-      </p>
     </div>
   );
 };
