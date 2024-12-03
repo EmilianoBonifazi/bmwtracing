@@ -13,6 +13,8 @@ interface InputSourcesProps {
   onTestDescriptionChange: (value: string) => void;
   onErrorDescriptionChange: (value: string) => void;
   onZipUpload: (file: File) => void;
+  dltFiles: File[];
+  onDltFilesChange: (files: File[]) => void;
 }
 
 export const InputSources = ({
@@ -20,7 +22,9 @@ export const InputSources = ({
   errorDescription,
   onTestDescriptionChange,
   onErrorDescriptionChange,
-  onZipUpload
+  onZipUpload,
+  dltFiles,
+  onDltFilesChange
 }: InputSourcesProps) => {
   const { toast } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -108,7 +112,7 @@ export const InputSources = ({
         </TabsList>
         
         <TabsContent value="dlt">
-          <FileUpload />
+          <FileUpload dltFiles={dltFiles} onDltFilesChange={onDltFilesChange} />
         </TabsContent>
         
         <TabsContent value="test">

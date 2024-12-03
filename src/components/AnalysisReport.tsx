@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Download, Send } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface AnalysisReportProps {
   workItemId: string;
@@ -19,16 +20,42 @@ interface AnalysisReportProps {
 
 export const AnalysisReport = ({ 
   workItemId, 
-  initialData, 
+  initialData,
   onSave,
   isGenerating 
 }: AnalysisReportProps) => {
+  const { toast } = useToast();
   const [reportData, setReportData] = useState({
     targetGroup: initialData?.targetGroup || "",
     errorTimestamp: initialData?.errorTimestamp || "",
     rootCause: initialData?.rootCause || "",
     description: initialData?.description || "",
   });
+
+  const handleSaveAsPDF = () => {
+    // Mock PDF generation
+    toast({
+      title: "Report Saved",
+      description: "Analysis report has been saved as PDF",
+    });
+    onSave(reportData);
+  };
+
+  const handleSendToTargetGroup = () => {
+    if (!reportData.targetGroup) {
+      toast({
+        title: "Error",
+        description: "Please select a target group first",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    toast({
+      title: "Work Item Sent",
+      description: `Work item has been sent to ${reportData.targetGroup}`,
+    });
+  };
 
   return (
     <Card className="p-6 space-y-6">
@@ -57,10 +84,11 @@ export const AnalysisReport = ({
 
         <div>
           <label className="block text-sm font-medium mb-1">Error Timestamp</label>
-          <Input
+          <input
             type="datetime-local"
             value={reportData.errorTimestamp}
             onChange={(e) => setReportData({ ...reportData, errorTimestamp: e.target.value })}
+            className="w-full px-3 py-2 border rounded-md"
           />
         </div>
 
@@ -84,9 +112,16 @@ export const AnalysisReport = ({
           />
         </div>
 
-        <Button onClick={() => onSave(reportData)} className="w-full">
-          Save Analysis Report
-        </Button>
+        <div className="flex gap-4">
+          <Button onClick={handleSaveAsPDF} className="flex-1 flex items-center gap-2">
+            <Download className="h-4 w-4" />
+            Save as PDF
+          </Button>
+          <Button onClick={handleSendToTargetGroup} className="flex-1 flex items-center gap-2">
+            <Send className="h-4 w-4" />
+            Send to Target Group
+          </Button>
+        </div>
       </div>
     </Card>
   );

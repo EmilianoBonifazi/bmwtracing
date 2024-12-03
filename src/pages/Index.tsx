@@ -59,6 +59,7 @@ const Index = () => {
   const [isGeneratingAnalysis, setIsGeneratingAnalysis] = useState(false);
   const [selectedWorkItem] = useState("2063495");
   const [analysisGenerated, setAnalysisGenerated] = useState(false);
+  const [dltFiles, setDltFiles] = useState<File[]>([]);
 
   const handleGenerateAnalysis = async () => {
     setIsGeneratingAnalysis(true);
@@ -92,6 +93,8 @@ const Index = () => {
           onTestDescriptionChange={setTestDescription}
           onErrorDescriptionChange={setErrorDescription}
           onZipUpload={handleZipUpload}
+          dltFiles={dltFiles}
+          onDltFilesChange={setDltFiles}
         />
         
         <AnalysisSection
