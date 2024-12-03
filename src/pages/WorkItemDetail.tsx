@@ -36,6 +36,13 @@ const WorkItemDetail = () => {
     });
   };
 
+  const handleZipUpload = (file: File) => {
+    toast({
+      title: "ZIP file uploaded",
+      description: "The ZIP file will be processed for analysis",
+    });
+  };
+
   return (
     <Layout>
       <div className="space-y-8">
@@ -58,6 +65,7 @@ const WorkItemDetail = () => {
           onErrorDescriptionChange={setErrorDescription}
           dltFiles={dltFiles}
           onDltFilesChange={setDltFiles}
+          onZipUpload={handleZipUpload}
         />
         
         <AnalysisSection
