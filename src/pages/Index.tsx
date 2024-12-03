@@ -68,9 +68,9 @@ const Index = () => {
   const [selectedWorkItem, setSelectedWorkItem] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [logSearchTerm, setLogSearchTerm] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
   const [isGeneratingAnalysis, setIsGeneratingAnalysis] = useState(false);
+  const [activeTab, setActiveTab] = useState("files");
 
   const handleSaveAnalysis = (data: any) => {
     console.log("Saving analysis:", data);
@@ -82,9 +82,9 @@ const Index = () => {
 
   const handleGenerateAIAnalysis = async () => {
     setIsGeneratingAnalysis(true);
-    // Simulate AI analysis generation
     await new Promise(resolve => setTimeout(resolve, 2000));
     setIsGeneratingAnalysis(false);
+    setActiveTab("analysis");
     toast({
       title: "AI Analysis Complete",
       description: "The analysis has been generated based on the test description and logs.",
@@ -145,26 +145,64 @@ const Index = () => {
             </button>
             
             <div className="space-y-8">
-              <FileUpload />
-              
-              <TestDescription 
-                content={mockTestDescription} 
-                isActive={currentStep === 2}
-              />
-              
-              <LogViewer 
-                logs={mockLogs}
-                errorTimestamp="2024-11-08T16:06:21"
-                timeWindow={30}
-                isActive={currentStep === 3}
-              />
-              
-              <AnalysisReport
-                workItemId={selectedWorkItem}
-                onSave={handleSaveAnalysis}
-                onGenerateAIAnalysis={handleGenerateAIAnalysis}
-                isGenerating={isGeneratingAnalysis}
-              />
+              <div className="space-y-6">
+                <h2 className="text-2xl font-semibold">Step 1: Input Sources</h2>
+                <Tabs defaultValue="files" className="w-full">
+                  <TabsList>
+                    <TabsTrigger value="files">DLT Files</TabsTrigger>
+                    <TabsTrigger value="test">Test Description</TabsTrigger>
+                    <TabsTrigger value="error">Error Description</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="files">
+                    <FileUpload />
+                  </TabsContent>
+                  <TabsContent value="test">
+                    <TestDescription content={mockTestDescription} isActive={true} />
+                  </TabsContent>
+                  <TabsContent value="error">
+                    <Card className="p-6">
+                      <h3 className="text-lg font-semibold mb-4">Error Description</h3>
+                      <textarea
+                        className="w-full h-64 p-4 border rounded-md"
+                        placeholder="Paste error description here..."
+                      />
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+              </div>
+
+              <div className="space-y-6">
+                <h2 className="text-2xl font-semibold">Step 2: Analysis</h2>
+                <Tabs value={activeTab} onValueChange={setActiveTab}>
+                  <TabsList>
+                    <TabsTrigger value="analysis">Analysis Report</TabsTrigger>
+                    <TabsTrigger value="logs">Relevant Logs</TabsTrigger>
+                    <TabsTrigger value="correlation">Error Correlation</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="analysis">
+                    <AnalysisReport
+                      workItemId={selectedWorkItem}
+                      onSave={handleSaveAnalysis}
+                      onGenerateAIAnalysis={handleGenerateAIAnalysis}
+                      isGenerating={isGeneratingAnalysis}
+                    />
+                  </TabsContent>
+                  
+                  <TabsContent value="logs">
+                    <LogViewer 
+                      logs={mockLogs}
+                      errorTimestamp="2024-11-08T16:06:21"
+                      timeWindow={30}
+                      isActive={true}
+                    />
+                  </TabsContent>
+                  
+                  <TabsContent value="correlation">
+                    <ErrorCorrelation workItemId={selectedWorkItem} />
+                  </TabsContent>
+                </Tabs>
+              </div>
             </div>
           </div>
         )}
