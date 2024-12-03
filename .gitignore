@@ -1,8 +1,24 @@
-venv
-*.pcap
-*.asc
-*.dlt
-googletest/
-*.mp4
-backend/dlt_files/2064581/Octane_attachments_work_item_2064581_11-18-2024_10-53-08/
-tcpreplay-4.4.4
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
