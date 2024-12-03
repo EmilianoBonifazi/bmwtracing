@@ -22,10 +22,11 @@ interface LogEntry {
 interface LogViewerProps {
   logs: LogEntry[];
   errorTimestamp?: string;
-  timeWindow?: number; // in seconds
+  timeWindow?: number;
+  isActive: boolean;
 }
 
-export const LogViewer = ({ logs, errorTimestamp, timeWindow = 30 }: LogViewerProps) => {
+export const LogViewer = ({ logs, errorTimestamp, timeWindow = 30, isActive }: LogViewerProps) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredLogs = logs.filter((log) => {
@@ -43,13 +44,14 @@ export const LogViewer = ({ logs, errorTimestamp, timeWindow = 30 }: LogViewerPr
 
   return (
     <div className="space-y-4">
+      <h3 className="text-lg font-semibold">Step 3: Review Relevant Logs</h3>
       <Input
         placeholder="Search logs..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="max-w-md"
       />
-      <Card className="p-4 bg-gray-900 text-white font-mono text-sm overflow-x-auto">
+      <Card className={`p-4 bg-gray-900 text-white font-mono text-sm overflow-x-auto ${isActive ? 'ring-2 ring-primary' : ''}`}>
         <div className="space-y-1">
           {filteredLogs.map((log) => (
             <div

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ErrorCorrelation } from "@/components/ErrorCorrelation";
 import { AnalysisReport } from "@/components/AnalysisReport";
+import { useToast } from "@/hooks/use-toast";
 
 const mockWorkItems = [
   { id: "2063495", status: "completed" as const },
@@ -28,7 +29,7 @@ const mockLogs = [
     ctid: "ANTN",
     sessionId: "1053",
     type: "log",
-    subtype: "info",
+    subtype: "info" as const,
     mode: "verbose",
     args: 8,
     payload: "[ AntennaControlExt : 1053 : 27937 ] checkAntennaStatusExt: antenna_mode[1], [pre_fault_cnt(-128)] [cur_antenna_dtc(0)], [pre_antenna_dtc(0)]"
@@ -43,7 +44,7 @@ const mockLogs = [
     ctid: "ANTN",
     sessionId: "1053",
     type: "log",
-    subtype: "error",
+    subtype: "error" as const,
     mode: "verbose",
     args: 8,
     payload: "[ SystemHal : 1053 : 27937 ] sl_hal_get_dtc_antenna_status: antenna_mode 5 antenna_adc 0 ret 0"
@@ -63,14 +64,31 @@ Steps:
 4. Check response times`;
 
 const Index = () => {
+  const { toast } = useToast();
   const [selectedWorkItem, setSelectedWorkItem] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [logSearchTerm, setLogSearchTerm] = useState("");
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isGeneratingAnalysis, setIsGeneratingAnalysis] = useState(false);
 
   const handleSaveAnalysis = (data: any) => {
     console.log("Saving analysis:", data);
-    // Implement save functionality
+    toast({
+      title: "Analysis saved",
+      description: "The analysis report has been saved successfully.",
+    });
+  };
+
+  const handleGenerateAIAnalysis = async () => {
+    setIsGeneratingAnalysis(true);
+    // Simulate AI analysis generation
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsGeneratingAnalysis(false);
+    toast({
+      title: "AI Analysis Complete",
+      description: "The analysis has been generated based on the test description and logs.",
+    });
   };
 
   const filteredWorkItems = mockWorkItems.filter(item => {
@@ -79,15 +97,9 @@ const Index = () => {
     return matchesStatus && matchesSearch;
   });
 
-  const filteredLogs = mockLogs.filter(log => 
-    log.payload.toLowerCase().includes(logSearchTerm.toLowerCase())
-  );
-
   return (
     <Layout>
       <div className="space-y-8">
-        <FileUpload />
-        
         {!selectedWorkItem ? (
           <div className="space-y-4">
             <div className="flex gap-4 items-center">
@@ -115,7 +127,10 @@ const Index = () => {
                 <WorkItemCard
                   key={item.id}
                   {...item}
-                  onView={() => setSelectedWorkItem(item.id)}
+                  onView={() => {
+                    setSelectedWorkItem(item.id);
+                    setCurrentStep(1);
+                  }}
                 />
               ))}
             </div>
@@ -129,55 +144,28 @@ const Index = () => {
               ← Back to Work Items
             </button>
             
-            <Tabs defaultValue="analysis-report">
-              <TabsList>
-                <TabsTrigger value="analysis-report">Analysis Report</TabsTrigger>
-                <TabsTrigger value="test-description">Test Description</TabsTrigger>
-                <TabsTrigger value="error-description">Error Description</TabsTrigger>
-                <TabsTrigger value="logs">Logs</TabsTrigger>
-                <TabsTrigger value="correlation">Error Correlation</TabsTrigger>
-              </TabsList>
+            <div className="space-y-8">
+              <FileUpload />
               
-              <TabsContent value="analysis-report">
-                <AnalysisReport
-                  workItemId={selectedWorkItem}
-                  onSave={handleSaveAnalysis}
-                />
-              </TabsContent>
-
-              <TabsContent value="test-description">
-                <TestDescription content={mockTestDescription} />
-              </TabsContent>
-
-              <TabsContent value="error-description">
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Error Description</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">
-                    {/* Add error description content */}
-                  </p>
-                </Card>
-              </TabsContent>
+              <TestDescription 
+                content={mockTestDescription} 
+                isActive={currentStep === 2}
+              />
               
-              <TabsContent value="logs">
-                <div className="space-y-4">
-                  <Input
-                    placeholder="Search logs..."
-                    value={logSearchTerm}
-                    onChange={(e) => setLogSearchTerm(e.target.value)}
-                    className="max-w-xs"
-                  />
-                  <LogViewer 
-                    logs={filteredLogs}
-                    errorTimestamp="2024-11-08T16:06:21"
-                    timeWindow={30}
-                  />
-                </div>
-              </TabsContent>
-
-              <TabsContent value="correlation">
-                <ErrorCorrelation workItemId={selectedWorkItem} />
-              </TabsContent>
-            </Tabs>
+              <LogViewer 
+                logs={mockLogs}
+                errorTimestamp="2024-11-08T16:06:21"
+                timeWindow={30}
+                isActive={currentStep === 3}
+              />
+              
+              <AnalysisReport
+                workItemId={selectedWorkItem}
+                onSave={handleSaveAnalysis}
+                onGenerateAIAnalysis={handleGenerateAIAnalysis}
+                isGenerating={isGeneratingAnalysis}
+              />
+            </div>
           </div>
         )}
       </div>
