@@ -5,6 +5,7 @@ import { WorkItemCard } from "@/components/WorkItemCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogViewer } from "@/components/LogViewer";
 import { TestDescription } from "@/components/TestDescription";
+import { Card } from "@/components/ui/card";
 
 // Mock data for demonstration
 const mockWorkItems = [

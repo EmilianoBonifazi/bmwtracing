@@ -1,7 +1,8 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, File, AlertCircle } from "lucide-react";
+import { FileText, File } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface WorkItemProps {
   id: string;
