@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 const WorkItemDetail = () => {
   const { id } = useParams();
@@ -17,31 +18,83 @@ const WorkItemDetail = () => {
   const [analysisGenerated, setAnalysisGenerated] = useState(false);
   const [dltFiles, setDltFiles] = useState<File[]>([]);
 
+  // Fetch work item data
+  const { data: workItem, isLoading } = useQuery({
+    queryKey: ['workItem', id],
+    queryFn: async () => {
+      // For now, return mock data since we don't have a real API
+      return {
+        id,
+        title: `Work Item #${id}`,
+        status: 'open'
+      };
+    },
+  });
+
   const handleGenerateAnalysis = async () => {
-    setIsGeneratingAnalysis(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsGeneratingAnalysis(false);
-    setAnalysisGenerated(true);
-    toast({
-      title: "Analysis Generated",
-      description: "The AI analysis has been completed successfully.",
-    });
+    try {
+      setIsGeneratingAnalysis(true);
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setAnalysisGenerated(true);
+      toast({
+        title: "Analysis Generated",
+        description: "The AI analysis has been completed successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate analysis. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingAnalysis(false);
+    }
   };
 
-  const handleSaveAnalysis = (data: any) => {
-    console.log("Saving analysis:", data);
-    toast({
-      title: "Analysis saved",
-      description: "The analysis report has been saved successfully.",
-    });
+  const handleSaveAnalysis = async (data: any) => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast({
+        title: "Analysis saved",
+        description: "The analysis report has been saved successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save analysis. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleZipUpload = (file: File) => {
-    toast({
-      title: "ZIP file uploaded",
-      description: "The ZIP file will be processed for analysis",
-    });
+  const handleZipUpload = async (file: File) => {
+    try {
+      // Simulate file upload
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast({
+        title: "ZIP file uploaded",
+        description: "The ZIP file will be processed for analysis",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to upload ZIP file. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
