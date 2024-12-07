@@ -1,3 +1,5 @@
+// frontend/src/components/WorkItemDetail.tsx
+
 import React, { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { InputSources } from "@/components/InputSources";
@@ -14,8 +16,6 @@ const WorkItemDetail = () => {
   const { toast } = useToast();
   const [testDescription, setTestDescription] = useState("");
   const [errorDescription, setErrorDescription] = useState("");
-  const [isGeneratingAnalysis, setIsGeneratingAnalysis] = useState(false);
-  const [analysisGenerated, setAnalysisGenerated] = useState(false);
   const [dltFiles, setDltFiles] = useState<File[]>([]);
 
   // Fetch work item data
@@ -26,31 +26,10 @@ const WorkItemDetail = () => {
       return {
         id,
         title: `Work Item #${id}`,
-        status: 'open'
+        status: 'open',
       };
     },
   });
-
-  const handleGenerateAnalysis = async () => {
-    try {
-      setIsGeneratingAnalysis(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setAnalysisGenerated(true);
-      toast({
-        title: "Analysis Generated",
-        description: "The AI analysis has been completed successfully.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to generate analysis. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsGeneratingAnalysis(false);
-    }
-  };
 
   const handleSaveAnalysis = async (data: any) => {
     try {
@@ -96,6 +75,40 @@ const WorkItemDetail = () => {
     );
   }
 
+  // Mock logs (replace with real logs as needed)
+  const mockLogs = [
+    {
+      index: 67,
+      time: "59:58.7",
+      timestamp: "2024-03-15T11:44:58.724",
+      count: 98,
+      ecuid: "INAD",
+      apid: "ANTN",
+      ctid: "ANTN",
+      sessionId: "1053",
+      type: "log",
+      subtype: "info" as const,
+      mode: "verbose",
+      args: 8,
+      payload: "[ AntennaControlExt : 1053 : 27937 ] checkAntennaStatusExt: antenna_mode[1], [pre_fault_cnt(-128)] [cur_antenna_dtc(0)], [pre_antenna_dtc(0)]",
+    },
+    {
+      index: 69,
+      time: "59:58.7",
+      timestamp: "2024-03-15T11:44:58.744",
+      count: 100,
+      ecuid: "INAD",
+      apid: "ANTN",
+      ctid: "ANTN",
+      sessionId: "1053",
+      type: "log",
+      subtype: "error" as const,
+      mode: "verbose",
+      args: 8,
+      payload: "[ SystemHal : 1053 : 27937 ] sl_hal_get_dtc_antenna_status: antenna_mode 5 antenna_adc 0 ret 0",
+    },
+  ];
+
   return (
     <Layout>
       <div className="space-y-8">
@@ -123,48 +136,15 @@ const WorkItemDetail = () => {
         
         <AnalysisSection
           workItemId={id || ""}
-          logs={analysisGenerated ? mockLogs : []}
+          logs={mockLogs}
           errorTimestamp="2024-03-15T11:44:58.744"
-          isGeneratingAnalysis={isGeneratingAnalysis}
-          onGenerateAnalysis={handleGenerateAnalysis}
+          testDescription={testDescription} // Pass test description
+          errorDescription={errorDescription} // Pass error description
           onSaveAnalysis={handleSaveAnalysis}
         />
       </div>
     </Layout>
   );
 };
-
-const mockLogs = [
-  { 
-    index: 67,
-    time: "59:58.7",
-    timestamp: "2024-03-15T11:44:58.724",
-    count: 98,
-    ecuid: "INAD",
-    apid: "ANTN",
-    ctid: "ANTN",
-    sessionId: "1053",
-    type: "log",
-    subtype: "info" as const,
-    mode: "verbose",
-    args: 8,
-    payload: "[ AntennaControlExt : 1053 : 27937 ] checkAntennaStatusExt: antenna_mode[1], [pre_fault_cnt(-128)] [cur_antenna_dtc(0)], [pre_antenna_dtc(0)]"
-  },
-  {
-    index: 69,
-    time: "59:58.7",
-    timestamp: "2024-03-15T11:44:58.744",
-    count: 100,
-    ecuid: "INAD",
-    apid: "ANTN",
-    ctid: "ANTN",
-    sessionId: "1053",
-    type: "log",
-    subtype: "error" as const,
-    mode: "verbose",
-    args: 8,
-    payload: "[ SystemHal : 1053 : 27937 ] sl_hal_get_dtc_antenna_status: antenna_mode 5 antenna_adc 0 ret 0"
-  }
-];
 
 export default WorkItemDetail;

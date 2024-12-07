@@ -83,31 +83,13 @@ export const AnalysisSection = ({
                               of identifying and filtering specific DLT files related to a given error timestamp and find the error root cause. \
                               0. Elaborate and understand the error description reported between these tags  <error description></error description> \
                               1. Error Timestamp: First, ensure you have memorized the error timestamp provided in the input.  \
-                              2. dlt file Search: Conduct a search within the specified folder and its subfolders: /workspaces/bmwtracing/backend/dlt_files/2064581/Octane_attachments_work_item_2064581_11-18-2024_10-53-08 \
-                                 looking only for files with the extension .dlt, the file names contain a timestamp , it must falls within the range of 30 seconds before the recorded error timestamp up to the error timestamp itself \
+                              2. File Search: Conduct a search within the specified folder and its subfolders: `/workspaces/bmwtracing/backend/dlt_files` \
+                                 Look for files with the extension `.dlt` and whose names contain a timestamp that falls within the range of 30 seconds before the recorded error timestamp up to the error timestamp itself \
                                  store the filtered list in a dlt_30.txt file \
-                                 The naming convention for these files is as follows : YYYY-MM-DD_HH-MM-SS_YYYY-MM-DD_HH-MM-SS_VXXXXXX_XXXXXX_XXXXXX_XXXXXX_XXXXXX_VX_XXXX.dlt \
-                              3. read the dlt_30.txt file, for each file utilize the /workspaces/bmwtracing/dlt-viewer/build/bin/dlt-viewer command to extract and display the logs looking for the error keyword  \
+                                 The naming convention for these files is as follows : `YYYY-MM-DD_HH-MM-SS_YYYY-MM-DD_HH-MM-SS_VXXXXXX_XXXXXX_XXXXXX_XXXXXX_XXXXXX_VX_XXXX.dlt` \
+                              3. read the dlt_30.txt file, for each file utilize the `/workspaces/bmwtracing/dlt-viewer/build/bin/dlt-viewer` command to extract and display the logs looking for the error keyword  \
                                  include always the -t -s options for the execution and -c output.txt for dumping in a file the research \
-                                 Command line usage: \
-                                        Linux: /workspaces/bmwtracing/dlt-viewer/build/bin/dlt-viewer [OPTIONS] [logfile] [projectfile] [filterfile] \
-                                        Options: \
-                                        [logfile] Loading one or more logfiles on startup (must end with .dlt) \
-                                        [projectfile] Loading project file on startup (must end with .dlp) \
-                                        [filterfile] Loading filterfile on startup (must end with .dlf) \
-                                        -h Print usage \
-                                        -c textfile Convert logfile file to textfile \
-                                        -u Conversion will be done in UTF8 instead of ASCII; \
-                                        -csv Conversion will be done in CSV format; \
-                                        -d Conversion will NOT be done, save in dlt file format again instead \
-                                        -dd Conversion will NOT be done, save as decoded messages in dlt format \
-                                        -b \"name of plugin|command in plugin|param1|..|param<n>\" Execute a plugin command with parameters before loading log file \
-                                        -e \"name of plugin|command in plugin|param1|..|param<n>\" Execute a plugin command with parameters after loading log file \
-                                        -s or --silent Enable silent mode without warning message boxes \
-                                        -t or --terminate Terminate DLT Viewer after command line execution \
-                                        -v or --version Only show version and buildtime information \
-                                        -w workingdirectory Set the working directory \
-                              4. parse the output.txt file and verify if you can find the error and the root cause and it's timestamp \
+                              4. read the output.txt file and verify if you can find the error and the root cause and it's timestamp \
                               5. if the error root cause is not identified continue to analyze with DLT Viewer the next dlt file present in the dlt_30.txt file \
                               Output your findings in a structured format that clearly lists the identified DLT file where you found the error, the error timestamp and the reported error description in the log";
 
