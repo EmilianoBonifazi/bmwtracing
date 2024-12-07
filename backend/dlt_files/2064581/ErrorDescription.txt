@@ -1,0 +1,57 @@
+TimeStamp 08.11.2024 [16:06:21]
+VINWBY21CF000CN15298- I20
+
+NA05-25-07-450
+
+IDCEVO25; BMW IDCEVO;mainline-24w44.7-1;idcevo;HWEL:B492-001.001.006
+
+Environment INT
+
+
+
+
+Preconditions
+
+
+CID is up and runningSamsung S20 (Android 13) connected for Android autoIPhone M(iPhone 10 iOS 18) connected for telephony
+Actions steps to (re-) produce the problem
+
+Android auto activeget an incoming call on iPhone 10 and accept it
+Expected behavior
+
+
+call should directly start from the HU without any issuesObserved behavior
+
+
+call connected but it was showing to continue from the mobile device.
+Customer impact
+
+05-unsatisfactory
+
+
+
+
+Recovery
+
+
+worked in a later LC
+Zeitpunkt: 08.11.2024 [16:06:21] (UTC + 1), 0 km
+Melder: Alex Shiffin; DE-611; ; Shiffin.Alex@partner.bmw.de
+Problemmanager: Irimie Dragos; DE-611; ; Dragos.IA.Irimie@partner.bmw.de
+Fahrt(en): Von 08.11.2024 [14:14] Uhr, 13373 km bis 11.11.2024 [09:04] Uhr, 13596 km
+Fahrzeug: I20; /DE; iX xDriv     ; M-CI 356E; WBY21CF000CN15298; 554646; 
+I-Stufe: NA05-25-11-420
+Head Unit: IDCEVO25; BMW IDCEVO;mainline-24w44.7-1;idcevo;HWEL:B492-001.001.006
+Ecu: IDCEVO25; BMW IDCEVO;mainline-24w44.7-1;idcevo; HWEL:B492-001.001.006
+Map DB:  / 
+Equipment: 
+Connected Drive: PROD: remoteServices(RLF, RHB, RDL, RDU, VF, RWC, RCHS_EES25, RCHC_EES25, RCN_EES25, RDT_EES25, REMOTE_PRE_WAKEUP), RemoteServices(RDL, RHB, VF, RLF, RDU, RD_INTERNAL, VF_INTERNAL, RHL_INTERNAL), GENERIC_VIN(TRIP_STATISTICS_ONBOARD, WALLET, MAPS_ROW, LSEARCH_APP_GOOGLE_LT, SPEECH_THIRD_PARTY_ALEXASDK, HV_WARN, CDC_2018, RSU_A4A, INCARPAYMENTLS2, SI_FESTIVAL_MODE, PPS, GLOBAL_FESTIVALAPP_AUTO_INSTALL_IDC, SPEECH_AMAZON_LOCAL, SLOPE_HUD, TACO_APP, RSU_BASIS, ANDROID_AUTO, CARPLAY, LIGHT_FOLLOWS_SOUND, AUTOINSTALL_FEATURE_ENABLED, MYINFO, AUTO_INSTALL_SPEECH_AMZ_APP, CRM_INFO, ASSISTED_DRIVING_VIEW, ANDROID_PROACTIVITY, NONDORMANT, PERSO_APPNUDGING_WELCOME, EUECALL, SHOP, INCARPAYMENT, ANDROID_WEATHER, PROACTIVE_CHARGING_PROPOSALS, PROTECTED_MODE_EES25, PERSO_APPNUDGING, SPEECH_AMAZON_CLOUD, PLUG_AND_CHARGE, SMART_ACCESS_LONG_EWSK, SFA_MASTER_EES25, REMOTE_IN_CAR_DWA_SP25, NGECALL, LOCATION_BASED_CHARGING_SETTINGS, CPD, IN_CAR_SENTINEL_SP25, REMOTE_IN_CAR_SP25, ANTI_THEFT_NOTIFICATION_EES25, SMART_ACCESS_SETUPCARD, GNSS_CORRECTION_TRUSTED, SMART_ACCESS_BASIC, GNSS_CORRECTION, MEDIAENGINE, AD_CALL, RKE_PARTIAL_ARMING_EES25, SAFE_SHARE_CAPABLE, M_VOICE, SMACC_2_UWB_ANDROID, SMART_ACCESS_ONLINE_IMMOTOKEN, SMART_ACCESS_2_ACTIVATION_UWB, BMW_LINK_VIEWER), teleServices(VF_INTERNAL, RHL_INTERNAL, TD_ASC, TD_B_CALL, TD_SPM, RD_INTERNAL, NETSCALER, MYINFO_INTERNAL, TD_HOTLC, ACALL_MANUAL, ACALL_AUTOMATIC), intelligentEmergencyCall(AACN, PSAP), connectedDriveServices(MYINFO_PUSH)
+Traces: \\europe.bmw.corp\BRIAN\DE-MUC\DTSV_IuK\NA5\CN15298\20241111_1151\
+Traces were converted with CARMEN 4.x TFC ==> please open the traces for analysis in CARMEN 4.x to get the correct timestamp
+
+              Informationen zum Zugriff auf die referenzierten Traces
+Weitere Auftreten - 0:TraceLab Session: https://tracelab.bmwgroup.net/sessions/vin/CN15298/timestamp/2024-11-08T16:06
+Trigger: Nein
+GPS: 48.192201, 11.568511
+
+=== end of error description ===
